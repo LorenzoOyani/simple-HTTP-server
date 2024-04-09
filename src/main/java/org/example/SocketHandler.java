@@ -8,9 +8,15 @@ import java.net.Socket;
 import java.util.Map;
 
 public class SocketHandler implements Runnable {
-    private Socket socket;
+    private final Socket socket;
     private Handler defaultHandlers;
-    private Map<String, Map<String, Handler>> handlers;
+    private final Map<String, Map<String, Handler>> handlers;
+
+    SocketHandler(Socket socket, Map<String, Map<String, Handler>> handlers) {
+        this.socket = socket;
+        this.handlers = handlers;
+
+    }
 
     public void log(String message) {
         System.out.println(message);
@@ -52,7 +58,7 @@ public class SocketHandler implements Runnable {
                 }
             }
             if (!foundHandler) {
-                if (methodHandlers.get("/*") != null) {
+                if (methodHandlers.get("/*") != null) { /*Non-null map values to keys*/
                     methodHandlers.get("/*").handle(request, response);
                     response.send();
 
