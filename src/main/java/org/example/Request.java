@@ -14,12 +14,12 @@ create an HttpServer class that has a running thread for each request and respon
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 public class Request {
-    private final Map<String, Object> headers = new HashMap<>();
+    private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> queryParameters = new HashMap<>();
-    private List<String > list = new ArrayList<>();
     private BufferedReader in = null;
     private String method;
     private String fullUrl;
@@ -28,7 +28,7 @@ public class Request {
     Request(BufferedReader in) {
         this.in = in;
     }
-    public Map<String, Object> getHeaders() {
+    public Map<String, String> getHeaders() {
         return headers;
     }
 
@@ -114,6 +114,11 @@ public class Request {
         }
         return true;
     }
+
+    public InputStream getBody() {
+        return new HttpInputStream(in, headers );
+    }
+
 
     @Override
     public String toString() {
